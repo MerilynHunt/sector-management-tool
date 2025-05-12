@@ -1,6 +1,6 @@
 <?php 
-
-$mysqli = new mysqli("localhost", "root", "", "sector_management_tool"); //open connection
+require_once __DIR__ . './db_config.php';
+$mysqli = new mysqli($DB_HOST, $DB_USER, $DB_PASS, $DB_NAME); //open connection
 
 if ($mysqli -> connect_errno) {
   echo "Failed to connect to MySQL: " . $mysqli -> connect_error;
