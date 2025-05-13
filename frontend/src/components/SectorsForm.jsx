@@ -62,48 +62,95 @@ function SectorsForm() {
   }
 
   return (
-    <div className="">
-      <form onSubmit={handleSubmit}>
-        <h1>Please enter your name and pick the Sectors you are currently involved in.</h1>
-        <label>Name:
-          <input 
-            type="text" 
-            id="name_input"
-            name="username" 
-            value={formData.username}
-            onChange={handleInputChange}
-          />
-        </label>
+    <div className="mt-12 flex flex-col items-center">
+        <form onSubmit={handleSubmit}>
+            <h1 className='pb-6 text-xl justify-self-center'>Please enter your name and pick the Sectors you are currently involved in.</h1>
 
-        <label>
-          Sectors:
-          <select
-            name="sectors"
-            multiple
-            value={formData.sectors}
-            onChange={handleInputChange}
-            size="5"
-          >
-            {fetchedSectors.map((sector) => (
-              <option key={sector.sector_id} value={sector.sector_id}>
-                {sector.sector_name}
-              </option>
-            ))}
-          </select>
-        </label>
+            {/* name */}
+            <div className='pb-6 text-lg flex flex-col items-start w-full'>
+                <label htmlFor="name_input" className="mb-2">Name:</label>
+                <input 
+                    type="text" 
+                    id="name_input"
+                    name="username" 
+                    value={formData.username}
+                    onChange={handleInputChange}
+                    className="border border-gray-400 rounded px-2 py-1 w-full max-w-md"
+                />
+            </div>
 
-        <label>Agree to terms
-          <input 
-            type="checkbox" 
-            id="terms_checkbox" 
-            name="terms"
-            checked={formData.terms}
-            onChange={handleInputChange}
-          />
-        </label>
-        <br/>
-        <input type="submit" value="save" />
-      </form>
+            <div className="pb-6 text-lg flex flex-col items-start w-full">
+                <label className="mb-2">Sectors:</label>
+
+                {/* selected tags */}
+                <div className="flex flex-wrap gap-2 mb-4 w-full max-w-md">
+                    {formData.sectors.map((sectorId) => {
+                    const sector = fetchedSectors.find((s) => s.sector_id == sectorId);
+                    return (
+                        <div
+                        key={sectorId}
+                        className="flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm"
+                        >
+                        {sector?.original_name}
+                        <button
+                            type="button"
+                            className="ml-2 text-gray-600 hover:text-red-600 font-bold"
+                            onClick={() =>
+                            setFormData((prev) => ({
+                                ...prev,
+                                sectors: prev.sectors.filter((id) => id !== sectorId),
+                            }))
+                            }
+                        >
+                            ×
+                        </button>
+                        </div>
+                    );
+                    })}
+                </div>
+
+                {/* dropdown */}
+                <select
+                    onChange={(e) => {
+                    const value = e.target.value;
+                    if (!formData.sectors.includes(value)) {
+                        setFormData((prev) => ({
+                        ...prev,
+                        sectors: [...prev.sectors, value],
+                        }));
+                    }
+                    e.target.value = "";
+                    }}
+                    className="border border-gray-400 rounded px-2 py-1 w-full max-w-md"
+                    value=""
+                >
+                    <option value="" disabled>Select a sector</option>
+                    {fetchedSectors
+                    .filter((s) => !formData.sectors.includes(s.sector_id))
+                    .map((sector) => (
+                        <option key={sector.sector_id} value={sector.sector_id}>
+                        {sector.sector_name}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            {/* terms */}
+            <div className="pb-2 text-lg flex flex-col">
+                <label className="pb-6">Agree to terms
+                <input 
+                    type="checkbox" 
+                    id="terms_checkbox" 
+                    name="terms"
+                    checked={formData.terms}
+                    onChange={handleInputChange}
+                    className="ml-4 border border-gray-400 rounded"
+                />
+                </label>
+
+            <input type="submit" value="save" className="px-4 py-1 self-start border border-gray-400 hover:bg-gray-200 rounded" />
+            </div>
+        </form>
     </div>
   )
 }
@@ -119,12 +166,13 @@ function buildSectorTree(sectors, parentId = null) { //build tree to ensure flex
     }));
 }
 
-function flattenSectorTree(tree, depth = 0) { //flatten for easier management
+function flattenSectorTree(tree, depth = 0) { //flatten tree for easier management
   let result = [];
   for (const node of tree) {
     result.push({
       sector_id: node.sector_id,
       sector_name: `${"\u00A0\u00A0\u00A0\u00A0".repeat(depth)}${node.sector_name}`,
+      original_name: node.sector_name,
     });
     result = result.concat(flattenSectorTree(node.children, depth + 1));
   }
