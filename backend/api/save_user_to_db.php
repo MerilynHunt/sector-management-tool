@@ -1,9 +1,11 @@
 <?php 
+session_start();
 $allowed_origin = "http://localhost:5173";
 
 header("Access-Control-Allow-Origin: $allowed_origin");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type");
+header('Access-Control-Allow-Credentials: true');
 
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     http_response_code(204);
@@ -69,6 +71,8 @@ try {
 
   //get inserted user id
   $user_id = $pdo->lastInsertId();
+
+  $_SESSION['user_id'] = $user_id;
 
   //user_sectors table
   $sql_user_sectors = $pdo->prepare("INSERT INTO user_sectors (user_sectors_user_id, user_sectors_sector_id) VALUES (:user_id, :sector_id)");
