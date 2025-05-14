@@ -71,9 +71,9 @@ try {
   $user_id = $pdo->lastInsertId();
 
   //user_sectors table
-  $stmt = $pdo->prepare("INSERT INTO user_sectors (user_sectors_user_id, user_sectors_sector_id) VALUES (:user_id, :sector_id)");
+  $sql_user_sectors = $pdo->prepare("INSERT INTO user_sectors (user_sectors_user_id, user_sectors_sector_id) VALUES (:user_id, :sector_id)");
     foreach ($sectors as $sector_id) {
-        $stmt->execute([
+        $sql_user_sectors->execute([
             ':user_id' => $user_id,
             ':sector_id' => (int)$sector_id
         ]);
