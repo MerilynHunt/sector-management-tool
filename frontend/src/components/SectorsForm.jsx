@@ -48,11 +48,13 @@ function SectorsForm() {
   }
 };
 
+  const saveDataUrl = 'http://localhost/sector_management_project_backend/api/save_user_to_db.php'
+
   const handleSubmit = (event) => {
     event.preventDefault();
 
     axios
-      .post("", formData) //REPLACE WITH SAVE USER FILE
+      .post(saveDataUrl, formData)
       .then((response) => {
         console.log(response);
       })
