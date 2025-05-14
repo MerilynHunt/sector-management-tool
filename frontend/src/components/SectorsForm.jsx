@@ -11,8 +11,8 @@ function SectorsForm() {
     terms: false,
     sectors: []
   });
-  const sectorsUrl = "http://localhost/sector_management_project_backend/api/get_sectors_from_db.php";
-  const userUrl = "http://localhost/sector_management_project_backend/api/get_user_from_db.php";
+  const sectorsUrl = "http://localhost/backend/api/get_sectors_from_db.php";
+  const userUrl = "http://localhost/backend/api/get_user_from_db.php";
 
    useEffect(() => {
     const fetchSectors = async () => {
@@ -74,8 +74,8 @@ function SectorsForm() {
   };
 
   const saveDataUrl = isEditMode
-    ? "http://localhost/sector_management_project_backend/api/update_user_in_db.php"
-    : "http://localhost/sector_management_project_backend/api/save_user_to_db.php";
+    ? "http://localhost/backend/api/update_user_in_db.php"
+    : "http://localhost/backend/api/save_user_to_db.php";
 
   const handleSubmit = (event) => {
     event.preventDefault();
