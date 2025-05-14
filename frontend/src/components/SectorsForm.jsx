@@ -5,6 +5,7 @@ axios.defaults.withCredentials = true;
 
 function SectorsForm() {
   const [fetchedSectors, setFetchedSectors] = useState([]);
+  const [isEditMode, setIsEditMode] = useState(false);
   const [formData, setFormData] = useState({
     username: "",
     terms: false,
@@ -34,12 +35,14 @@ function SectorsForm() {
             terms: false,
             sectors: [],
           });
+          setIsEditMode(false);
         } else {
           setFormData({
             username: userData.username || '',
             terms: userData.terms || false,
             sectors: userData.sectors || [],
           });
+          setIsEditMode(true);
         }
 
       } catch (err) {
@@ -50,28 +53,30 @@ function SectorsForm() {
   }, []);
 
   const handleInputChange = (event) => {
-  const { name, value, type, checked } = event.target;
+    const { name, value, type, checked } = event.target;
 
-  if (type === "checkbox") {
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: checked,
-    }));
-  } else if (type === "select-multiple") {
-    const selectedOptions = Array.from(event.target.selectedOptions).map(option => option.value);
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: selectedOptions,
-    }));
-  } else {
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
-  }
-};
+    if (type === "checkbox") {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: checked,
+      }));
+    } else if (type === "select-multiple") {
+      const selectedOptions = Array.from(event.target.selectedOptions).map(option => option.value);
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: selectedOptions,
+      }));
+    } else {
+      setFormData((prevData) => ({
+        ...prevData,
+        [name]: value,
+      }));
+    }
+  };
 
-  const saveDataUrl = 'http://localhost/sector_management_project_backend/api/save_user_to_db.php';
+  const saveDataUrl = isEditMode
+    ? 'http://localhost/sector_management_project_backend/api/update_user_in_db.php'
+    : 'http://localhost/sector_management_project_backend/api/save_user_to_db.php';
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -79,8 +84,24 @@ function SectorsForm() {
     axios
       .post(saveDataUrl, formData, { withCredentials: true })
       .then((response) => {
-        console.log(response);
-      })
+      console.log(response);
+
+      const data = response.data;
+
+      if (data.deleted) {
+        setFormData({
+          username: '',
+          terms: false,
+          sectors: [],
+        });
+
+        setIsEditMode(false);
+
+        alert("Your data has been deleted.");
+      } else if (data.success || data.updated) {
+        alert("Your data has been saved.");
+      }
+    })
       .catch((error) => {
         console.log(error);
       });
@@ -174,7 +195,7 @@ function SectorsForm() {
                 />
                 </label>
 
-            <input type="submit" value="save" className="px-4 py-1 self-start border border-gray-400 hover:bg-gray-200 rounded" />
+            <input type="submit" value={isEditMode ? "Update" : "Save"} className="px-4 py-1 self-start border border-gray-400 hover:bg-gray-200 rounded" />
             </div>
         </form>
     </div>
