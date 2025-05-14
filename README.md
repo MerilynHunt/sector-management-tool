@@ -62,4 +62,5 @@ npm start
 ### 6. Visit the localhost address used by React
 Fill out the name input, select sectors from the list, agree to the terms and click save
 > The data is then sent to the database
+
 If you wish to delete submitted data then during the active session disagree to the terms and the data will be deleted
