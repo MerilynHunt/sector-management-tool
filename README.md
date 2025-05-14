@@ -12,7 +12,9 @@ Sector options are imported from a predefined HTML list and stored in a database
 - PHP backend API for form handling and database interaction
 - Sector list imported from HTML with auto-detected hierarchy
 - Data stored in a MariaDB database
-- Sessions to allow users to edit their own data
+- Sessions to allow users to edit and delete their own data
+
+![final_diagram](https://github.com/user-attachments/assets/41e5f373-39d3-4705-8dfd-9633f0a25484)
 
 ---
 
@@ -26,9 +28,9 @@ Make sure the following components are running:
 - Apache
 - MySQL
 
-### 2. Clone the repository to a local folder
+### 2. Clone the repository and set up backend
 - https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository
-- Move the **import_sectors_to_db.php** and **sectors.html** files from the backend folder to a XAMPP htdocs new folder
+- Move the **backend** folder from the project folder to the XAMPP htdocs folder
 
 ---
 
@@ -60,31 +62,4 @@ npm start
 ### 6. Visit the localhost address used by React
 Fill out the name input, select sectors from the list, agree to the terms and click save
 > The data is then sent to the database
-
----
-
-## Project structure
-```
-sector-management-project/
-├── backend/                        # PHP backend
-│   ├── api/                        # API endpoints
-│   ├── sectors.html                # HTML source file
-│   ├── import_sectors_to_db.php    # Parses and inserts sectors to db
-│   └── db_config.sample.php        # Example config file
-├── frontend/                       # React frontend with Tailwind CSS
-│   ├── public/
-│   ├── src/
-│   │   ├── App.css                 # Additional styling file
-│   │   ├── App.jsx                 # Main React component
-│   │   ├── index.css               # Tailwind import
-│   │   └── main.jsx                # App mounting file
-│   ├── package.json                # Frontend dependencies
-│   ├── tailwind.config.js          # Tailwind configuration
-│   ├── vite.config.js              # Vite configuration
-│   ├── .gitignore
-│   └── index.html                  # Entry point to frontend
-├── sql/
-│   └── schema.sql                  # Full DB schema
-├── .gitignore
-└── README.md
-```
+If you wish to delete submitted data then during the active session disagree to the terms and the data will be deleted
