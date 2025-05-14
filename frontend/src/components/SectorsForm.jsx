@@ -82,7 +82,7 @@ function SectorsForm() {
             </div>
 
             <div className="pb-6 text-lg flex flex-col items-start w-full">
-                <label className="mb-2">Sectors:</label>
+                <label htmlFor="sectors_select" className="mb-2">Sectors:</label>
 
                 {/* selected tags */}
                 <div className="flex flex-wrap gap-2 mb-4 w-full max-w-md">
@@ -123,6 +123,7 @@ function SectorsForm() {
                     }
                     e.target.value = "";
                     }}
+                    id="sectors_select"
                     className="border border-gray-400 rounded px-2 py-1 w-full max-w-md"
                     value=""
                 >
