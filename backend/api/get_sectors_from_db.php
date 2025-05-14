@@ -26,7 +26,12 @@ $sectors = [];
 
 if ($result && $result->num_rows > 0) {
     while ($row = $result->fetch_assoc()) {
-        $sectors[] = $row;
+        $sanitized_row = [
+            'sector_id' => filter_var($row['sector_id'], FILTER_VALIDATE_INT),
+            'sector_name' => htmlspecialchars($row['sector_name'], ENT_QUOTES, 'UTF-8'),
+            'sector_parent_id' => isset($row['sector_parent_id']) ? filter_var($row['sector_parent_id'], FILTER_VALIDATE_INT) : null,
+        ];
+        $sectors[] = $sanitized_row;
     }
 }
 
